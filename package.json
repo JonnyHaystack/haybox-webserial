@@ -1,0 +1,14 @@
+{
+  "name": "haybox-webserial",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "repository": "https://github.com/JonnyHaystack/haybox-webserial.git",
+  "author": "Jonathan Haylett",
+  "license": "LGPL-3.0-only",
+  "private": false,
+  "dependencies": {
+    "@types/w3c-web-serial": "^1.0.6",
+    "buffer": "^6.0.3",
+    "ucobs": "^1.0.0"
+  }
+}

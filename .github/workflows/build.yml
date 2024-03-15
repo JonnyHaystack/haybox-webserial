@@ -40,17 +40,18 @@ jobs:
           repository: ${{ env.PROTO_REPO }}
           ref: ${{ env.PROTO_REVISION }}
           path: proto
-
-      - name: Generate code from Protobuf definitions
-        run: |
-          npx pbjs -t static-module -w es6 -o config.js config.proto
-          npx pbts -o config.d.ts config.js
       
       - name: Check some stuff
         run: |
           ls -lah
           ls -lah proto
           ls -lah ..
+
+      - name: Generate code from Protobuf definitions
+        run: |
+          cd proto
+          npx pbjs -t static-module -w es6 -o config.js config.proto
+          npx pbts -o config.d.ts config.js
 
       - name: Setup Node
         uses: actions/setup-node@v4

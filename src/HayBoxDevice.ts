@@ -17,6 +17,7 @@ class HayBoxDevice {
             console.log(`Failed to open serial port: ${ex}`);
             return null;
         }
+
         let response: Uint8Array | null = null;
         try {
             if (await this.writePacket(Command.CMD_GET_DEVICE_INFO)) {
@@ -46,7 +47,8 @@ class HayBoxDevice {
             console.log(`Failed to open serial port: ${ex}`);
             return null;
         }
-        let response;
+
+        let response: Uint8Array | null = null;
         try {
             if (await this.writePacket(Command.CMD_GET_CONFIG)) {
                 response = await this.readPacket();
@@ -62,6 +64,63 @@ class HayBoxDevice {
             return Config.decode(response.slice(1));
         } else if (response[0] === Command.CMD_ERROR) {
             console.log(`Error: ${response.slice(1)}`);
+        }
+    }
+
+    public async setConfig(config: Config) {
+        console.log("Sending SET_CONFIG");
+        try {
+            await this.openSerialPort();
+        } catch (ex) {
+            console.log(`Failed to open serial port: ${ex}`);
+            return null;
+        }
+
+        let response: Uint8Array | null = null;
+        try {
+            if (await this.writePacket(Command.CMD_SET_CONFIG, Config.encode(config).finish())) {
+                response = await this.readPacket();
+            }
+        } finally {
+            await this.closeSerialPort();
+        }
+
+        if (response == null || response.length <= 0) {
+            return null;
+        } else if (response[0] === Command.CMD_ERROR) {
+            console.log(`Error: ${response.slice(1)}`);
+        }
+    }
+
+    public async rebootFirmware() {
+        console.log("Sending CMD_REBOOT_FIRMWARE");
+        try {
+            await this.openSerialPort();
+        } catch (ex) {
+            console.log(`Failed to open serial port: ${ex}`);
+            return null;
+        }
+
+        try {
+            await this.writePacket(Command.CMD_REBOOT_FIRMWARE);
+        } finally {
+            await this.closeSerialPort();
+        }
+    }
+
+    public async rebootBootloader() {
+        console.log("Sending CMD_REBOOT_BOOTLOADER");
+        try {
+            await this.openSerialPort();
+        } catch (ex) {
+            console.log(`Failed to open serial port: ${ex}`);
+            return null;
+        }
+
+        try {
+            await this.writePacket(Command.CMD_REBOOT_BOOTLOADER);
+        } finally {
+            await this.closeSerialPort();
         }
     }
 

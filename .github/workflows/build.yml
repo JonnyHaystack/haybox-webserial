@@ -39,7 +39,7 @@ jobs:
         with:
           repository: ${{ env.PROTO_REPO }}
           ref: ${{ env.PROTO_REVISION }}
-          path: proto
+          path: ${{ github.workspace }}/proto
       
       - name: Check some stuff
         run: |

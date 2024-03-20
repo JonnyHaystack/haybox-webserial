@@ -12,7 +12,7 @@ jobs:
       meta_json: ${{ steps.parse_yaml.outputs.metadata }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install yaml2json
       run: python3 -m pip install remarshal
@@ -38,20 +38,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.PROTO_REPO }}
-          # ref: ${{ env.PROTO_REVISION }}
-          fetch-depth: 0
           path: proto
+          fetch-depth: 0
       
       - name: Checkout specific HayBox-proto revision
         run: |
           cd proto
           git checkout ${{ env.PROTO_REVISION }}
-      
-      - name: Check some stuff
-        run: |
-          ls -lah
-          ls -lah ..
-          ls -lah proto
 
       - name: Setup Node
         uses: actions/setup-node@v4

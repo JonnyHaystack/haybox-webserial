@@ -35,11 +35,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check out HayBox-proto repo
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
         with:
           repository: ${{ env.PROTO_REPO }}
           ref: ${{ env.PROTO_REVISION }}
-          path: proto
+          fetch-depth: 0
+          # path: proto
+
       
       - name: Check some stuff
         run: |

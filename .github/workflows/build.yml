@@ -55,6 +55,7 @@ jobs:
 
       - name: Generate code from Protobuf definitions
         run: |
+          npm install
           cd proto
           npx pbjs -t static-module -w es6 -o config.js config.proto
           npx pbts -o config.d.ts config.js

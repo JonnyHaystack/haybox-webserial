@@ -12,6 +12,10 @@
   "dependencies": {
     "@types/w3c-web-serial": "^1.0.6",
     "buffer": "^6.0.3",
+    "protobufjs": "^7.2.6",
     "ucobs": "^1.0.0"
+  },
+  "devDependencies": {
+    "protobufjs-cli": "^1.1.2"
   }
 }

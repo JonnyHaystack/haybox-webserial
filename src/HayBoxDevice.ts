@@ -134,4 +134,4 @@ class HayBoxDevice {
     }
 }
 
-export { HayBoxDevice };
+export default HayBoxDevice;

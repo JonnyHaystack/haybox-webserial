@@ -2,7 +2,11 @@
     "name": "haybox-webserial",
     "description": "Implementation of HayBox firmware config protocol using Web Serial",
     "version": "0.0.2",
-    "main": "index.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/JonnyHaystack/haybox-webserial.git"
@@ -17,6 +21,7 @@
         "ucobs": "^1.0.0"
     },
     "devDependencies": {
-        "protobufjs-cli": "^1.1.2"
+        "protobufjs-cli": "^1.1.2",
+        "typescript": "^5.4.3"
     }
 }

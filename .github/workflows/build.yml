@@ -55,9 +55,11 @@ jobs:
       - name: Generate code from Protobuf definitions
         run: |
           yarn
-          cd proto
-          npx pbjs -t static-module -w es6 -o config.js config.proto
-          npx pbts -o config.d.ts config.js
+          mkdir ./src/proto
+          yarn pbjs -t static-module -w es6 -o ./src/proto/config.js ./proto/config.proto
+          yarn pbts -o ./src/proto/config.d.ts ./src/proto/config.js
+          tsc
+          cp -r ./src/proto ./dist/
 
       - name: Publish package
         run: yarn publish

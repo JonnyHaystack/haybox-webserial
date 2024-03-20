@@ -39,13 +39,13 @@ jobs:
         with:
           repository: ${{ env.PROTO_REPO }}
           ref: ${{ env.PROTO_REVISION }}
-          path: ${{ github.workspace }}/proto
+          path: proto
       
       - name: Check some stuff
         run: |
           ls -lah
-          ls -lah proto
           ls -lah ..
+          ls -lah proto
 
       - name: Generate code from Protobuf definitions
         run: |

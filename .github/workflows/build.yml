@@ -53,23 +53,20 @@ jobs:
           ls -lah ..
           ls -lah proto
 
-      - name: Generate code from Protobuf definitions
-        run: |
-          npm install
-          cd proto
-          npx pbjs -t static-module -w es6 -o config.js config.proto
-          npx pbts -o config.d.ts config.js
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Build package
-        run: npm ci
+      - name: Generate code from Protobuf definitions
+        run: |
+          yarn
+          cd proto
+          npx pbjs -t static-module -w es6 -o config.js config.proto
+          npx pbts -o config.d.ts config.js
 
       - name: Publish package
-        run: npm publish
+        run: yarn npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

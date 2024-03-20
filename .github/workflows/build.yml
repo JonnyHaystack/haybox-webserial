@@ -67,6 +67,6 @@ jobs:
           npx pbts -o config.d.ts config.js
 
       - name: Publish package
-        run: yarn npm publish
+        run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

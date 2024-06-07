@@ -1,7 +1,7 @@
 {
     "name": "haybox-webserial",
     "description": "Implementation of HayBox firmware config protocol using Web Serial",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [

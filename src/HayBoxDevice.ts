@@ -31,7 +31,7 @@ class HayBoxDevice {
             return null;
         }
         if (response[0] === Command.CMD_SET_DEVICE_INFO) {
-            return DeviceInfo.decode(response.slice(1));
+            return DeviceInfo.fromBinary(response.slice(1));
         } else if (response[0] === Command.CMD_ERROR) {
             console.log(`Error: ${response.slice(1)}`);
         }
@@ -61,7 +61,7 @@ class HayBoxDevice {
             return null;
         }
         if (response[0] === Command.CMD_SET_CONFIG) {
-            return Config.decode(response.slice(1));
+            return Config.fromBinary(response.slice(1));
         } else if (response[0] === Command.CMD_ERROR) {
             console.log(`Error: ${response.slice(1)}`);
         }
@@ -78,7 +78,7 @@ class HayBoxDevice {
 
         let response: Uint8Array | null = null;
         try {
-            if (await this.writePacket(Command.CMD_SET_CONFIG, Config.encode(config).finish())) {
+            if (await this.writePacket(Command.CMD_SET_CONFIG, config.toBinary())) {
                 response = await this.readPacket();
             }
         } finally {

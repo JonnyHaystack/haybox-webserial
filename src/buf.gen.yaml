@@ -1,0 +1,8 @@
+version: v1
+plugins:
+  # This will invoke protoc-gen-es and write output to src/gen
+  - plugin: es
+    out: proto
+    opt: 
+      # Add more plugin options here
+      - target=ts

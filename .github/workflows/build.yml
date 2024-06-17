@@ -54,10 +54,10 @@ jobs:
 
       - name: Generate code from Protobuf definitions
         run: |
-          yarn
           mkdir ./src/proto
-          yarn pbjs -t static-module -w es6 -o ./src/proto/config.js ./proto/config.proto
-          yarn pbts -o ./src/proto/config.d.ts ./src/proto/config.js
+          cd src
+          npx buf generate
+          cd ..
           tsc
           cp -r ./src/proto ./dist/
 

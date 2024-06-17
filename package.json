@@ -16,12 +16,14 @@
     "private": false,
     "dependencies": {
         "@types/w3c-web-serial": "^1.0.6",
+       	"@bufbuild/protobuf": "^1.10.0", 
         "buffer": "^6.0.3",
-        "protobufjs": "^7.2.6",
         "ucobs": "^1.0.0"
     },
     "devDependencies": {
         "protobufjs-cli": "^1.1.2",
-        "typescript": "^5.4.3"
+        "typescript": "^5.4.3",
+        "@bufbuild/buf": "^1.33.0",
+		"@bufbuild/protoc-gen-es": "^1.10.0"
     }
 }

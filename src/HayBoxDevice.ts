@@ -1,6 +1,6 @@
 import { Buffer } from "buffer";
-import { createBlockDecoder, createBlockEncoder } from "ucobs";
-import { Command, Config, DeviceInfo } from "./proto/config";
+import { decode as cobsDecode, encode as cobsEncode } from "./cobs";
+import { Command, Config, DeviceInfo } from "./proto/config_pb";
 
 class HayBoxDevice {
     serialPort: SerialPort | null;
@@ -31,9 +31,9 @@ class HayBoxDevice {
             return null;
         }
         if (response[0] === Command.CMD_SET_DEVICE_INFO) {
-            return DeviceInfo.decode(response.slice(1));
+            return DeviceInfo.fromBinary(response.slice(1));
         } else if (response[0] === Command.CMD_ERROR) {
-            console.log(`Error: ${response.slice(1)}`);
+            this.printError(response);
         }
 
         return null;
@@ -61,9 +61,9 @@ class HayBoxDevice {
             return null;
         }
         if (response[0] === Command.CMD_SET_CONFIG) {
-            return Config.decode(response.slice(1));
+            return Config.fromBinary(response.slice(1));
         } else if (response[0] === Command.CMD_ERROR) {
-            console.log(`Error: ${response.slice(1)}`);
+            this.printError(response);
         }
     }
 
@@ -73,12 +73,12 @@ class HayBoxDevice {
             await this.openSerialPort();
         } catch (ex) {
             console.log(`Failed to open serial port: ${ex}`);
-            return null;
+            return false;
         }
 
         let response: Uint8Array | null = null;
         try {
-            if (await this.writePacket(Command.CMD_SET_CONFIG, Config.encode(config).finish())) {
+            if (await this.writePacket(Command.CMD_SET_CONFIG, config.toBinary())) {
                 response = await this.readPacket();
             }
         } finally {
@@ -86,10 +86,15 @@ class HayBoxDevice {
         }
 
         if (response == null || response.length <= 0) {
-            return null;
+            return false;
         } else if (response[0] === Command.CMD_ERROR) {
-            console.log(`Error: ${response.slice(1)}`);
+            this.printError(response);
+        } else if (response[0] == Command.CMD_SUCCESS) {
+            console.log("Config updated successfully");
+            return true;
         }
+
+        return false;
     }
 
     public async rebootFirmware() {
@@ -152,13 +157,8 @@ class HayBoxDevice {
             reader.releaseLock();
         }
 
-        let decoded: Uint8Array | null = null;
-        const decode = createBlockDecoder((decodedData) => {
-            decoded = decodedData;
-        });
-        decode(rawData);
-
-        return decoded;
+        const decodedData = cobsDecode(rawData);
+        return decodedData.subarray(0, decodedData.length - 1);
     }
 
     private async writePacket(commandId: number, arg?: Uint8Array) {
@@ -173,10 +173,10 @@ class HayBoxDevice {
                 rawData = Buffer.concat([rawData, arg]);
             }
 
-            const encodeAndWrite = createBlockEncoder(async (encodedData) => {
-                await writer.write(encodedData);
-            });
-            encodeAndWrite(rawData);
+            const encodedData = cobsEncode(rawData);
+            await writer.write(encodedData);
+        } catch (ex) {
+            console.log(`Error sending packet: ${ex}`);
         } finally {
             writer.releaseLock();
         }
@@ -190,6 +190,11 @@ class HayBoxDevice {
 
     private async closeSerialPort() {
         await this.serialPort?.close();
+    }
+
+    private printError(response: Uint8Array) {
+        const errMsg = new TextDecoder().decode(response.slice(1));
+        console.log(`Error: ${errMsg}`);
     }
 }
 

@@ -2,5 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["meta.yaml$"],
+      "matchStrings": [
+        "revision:\\s+(?<currentValue>[^\\s]+)"
+      ],
+      "depNameTemplate": "HayBox-proto",
+      "autoReplaceStringTemplate": "revision: {{{newValue}}}",
+      "datasourceTemplate": "git-refs"
+    }
   ]
 }

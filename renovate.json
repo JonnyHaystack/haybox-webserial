@@ -12,6 +12,7 @@
       ],
       "depNameTemplate": "HayBox-proto",
       "autoReplaceStringTemplate": "revision: {{{newValue}}}",
+      "packageNameTemplate": "https://github.com/JonnyHaystack/HayBox-proto",
       "datasourceTemplate": "git-refs"
     }
   ]
